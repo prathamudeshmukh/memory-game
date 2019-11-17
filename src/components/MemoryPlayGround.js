@@ -15,6 +15,8 @@ export default class MemoryPlayGround extends React.Component {
                         rowData={this.props.memoryData[i] ? this.props.memoryData[i]: []}
                         hideTiles={this.props.hideTiles}
                         columns={this.props.columns}
+                        onTileClick={this.props.onTileClick}
+                        currentRow={i}
                     />);
                 }
                 return rows;

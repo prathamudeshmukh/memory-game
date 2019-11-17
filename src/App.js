@@ -11,47 +11,107 @@ export default class App extends React.Component {
         this.rows = 5;
         this.columns = 5;
         this.memorizeTime = 10;
+        this.noOfQuestionsToBeAsked = 5;
         this.state = {
             hideTiles: true,
             showTilesTimer: this.memorizeTime,
-            memoryData: []
+            memoryData: [],
+            readComplete: false,
+            guessQuestionsAlreadyAsked:[]
         };
-        _.bindAll(this, "startGame")
+        _.bindAll(this, "startGame", "onTileClick")
     }
 
     getMemoryData() {
         let memoryData = [];
+        const memoryMetaData = [];
         for (let row=0; row<this.rows; row++) {
-            const row = [];
+            const newRow = [];
             for (let col=0; col<this.columns; col++) {
-                row.push(this.getRandomInt());
+                const number = this.getRandomInt(99);
+                newRow.push(number);
+                memoryMetaData.push(number);
             }
-            memoryData.push(row);
+            memoryData.push(newRow);
         }
-        return memoryData;
+        const questionsToBeAsked = this.getQuestionsToBeAsked(memoryMetaData);
+        return {memoryData, memoryMetaData, questionsToBeAsked};
     }
 
-    getRandomInt() {
-        return Math.floor(Math.random() * Math.floor(99));
+    getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
     }
 
     startGame() {
-        const memoryData = this.getMemoryData();
-        this.setState( { hideTiles: false, memoryData } );
+        const { memoryData, memoryMetaData, questionsToBeAsked} = this.getMemoryData();
+        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked } );
         this.showTilesTimerInterval = setInterval(() => {
             this.setState( {showTilesTimer: this.state.showTilesTimer - 1} )
         }, 1000);
 
         setTimeout(() => {
-            this.setState({hideTiles: true, showTilesTimer: this.memorizeTime});
+            this.setState({hideTiles: true, showTilesTimer: this.memorizeTime, readComplete: true});
             clearInterval(this.showTilesTimerInterval);
         }, this.memorizeTime * 1000)
     }
 
+    guessQuestion(){
+        if(this.state.readComplete){
+            console.log("MemoryData", this.state.memoryData);
+            console.log("questionsToBeAsked", this.state.questionsToBeAsked);
+            console.log("memoryMetaData", this.state.memoryMetaData);
+
+            const {questionsToBeAsked, memoryMetaData} = this.state;
+            if (questionsToBeAsked.length === 0) {
+                return 'Round over';
+            }
+            const memoryDataIndex = questionsToBeAsked[questionsToBeAsked.length - 1];
+            return `Guess where was ${memoryMetaData[memoryDataIndex]}`
+        }
+    }
+
+    numberGuess(questionsToBeAsked,memoryMetaData){
+        const max = memoryMetaData.length;
+        const index = this.getRandomInt(max);
+        if (questionsToBeAsked.includes(index)) {
+            return this.numberGuess(questionsToBeAsked,memoryMetaData);
+        }
+        return index;
+    }
+
+    getQuestionsToBeAsked(memoryMetaData) {
+        const questionsToBeAsked = [];
+        _.times(this.noOfQuestionsToBeAsked, ()=>{
+            questionsToBeAsked.push(this.numberGuess(questionsToBeAsked, memoryMetaData));
+        });
+        return questionsToBeAsked;
+    }
+
+    onTileClick(row, col) {
+        const { questionsToBeAsked, memoryData, memoryMetaData} = this.state;
+        const latestGuessQuestion = questionsToBeAsked[questionsToBeAsked.length - 1];
+        console.log('clicked on:'+ memoryData[row][col]);
+        console.log('Expected :'+ memoryMetaData[latestGuessQuestion]);
+        if (memoryData[row][col] === memoryMetaData[latestGuessQuestion]) {
+            alert("success");
+            questionsToBeAsked.pop();
+            this.setState( { questionsToBeAsked } );
+            return;
+        }
+        alert("failure");
+    }
+
     render() {
         return <div className="App">
-            <MemoryPlayGround memoryData={this.state.memoryData} rows={this.rows} columns={this.columns} hideTiles={this.state.hideTiles}/>
+            <MemoryPlayGround
+                memoryData={this.state.memoryData}
+                rows={this.rows}
+                columns={this.columns}
+                hideTiles={this.state.hideTiles}
+                onTileClick={this.onTileClick}
+            />
             <div>{this.state.showTilesTimer ? this.state.showTilesTimer : ""}</div>
+            <div>{this.guessQuestion()}</div>
             <button onClick={this.startGame}>Start!</button>
         </div>
     }
