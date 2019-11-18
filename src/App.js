@@ -17,7 +17,8 @@ export default class App extends React.Component {
             showTilesTimer: this.memorizeTime,
             memoryData: [],
             readComplete: false,
-            guessQuestionsAlreadyAsked:[]
+            guessQuestionsAlreadyAsked:[],
+            progressBar: 100
         };
         _.bindAll(this, "startGame", "onTileClick")
     }
@@ -44,13 +45,15 @@ export default class App extends React.Component {
 
     startGame() {
         const { memoryData, memoryMetaData, questionsToBeAsked} = this.getMemoryData();
-        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked } );
+        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked, progressBar: 0 } );
         this.showTilesTimerInterval = setInterval(() => {
-            this.setState( {showTilesTimer: this.state.showTilesTimer - 1} )
+            this.setState( {
+                showTilesTimer: this.state.showTilesTimer - 1
+            } )
         }, 1000);
 
         setTimeout(() => {
-            this.setState({hideTiles: true, showTilesTimer: this.memorizeTime, readComplete: true});
+            this.setState({hideTiles: true, showTilesTimer: this.memorizeTime, readComplete: true });
             clearInterval(this.showTilesTimerInterval);
         }, this.memorizeTime * 1000)
     }
@@ -112,6 +115,14 @@ export default class App extends React.Component {
             />
             <div>{this.state.showTilesTimer ? this.state.showTilesTimer : ""}</div>
             <div>{this.guessQuestion()}</div>
+            <div className="status-bar-border">
+                <div className="status-bar-fill" style={{
+                    width: `${this.state.progressBar}%`,
+                    transitionDuration: `${this.memorizeTime}s`
+                }} >
+                    {this.state.showTilesTimer ? this.state.showTilesTimer : ""}
+                </div>
+            </div>
             <button onClick={this.startGame}>Start!</button>
         </div>
     }

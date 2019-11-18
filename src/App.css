@@ -23,6 +23,20 @@
     height: 55px;
 }
 
+.status-bar-fill{
+    height: 37px;
+    transition-timing-function: ease;
+    background-color: #09d3ac;
+    border: 1px solid #09d3ac;
+    transition: width;
+}
+
+.status-bar-border{
+    border: 1px solid #11aaaa;
+    margin: 10px 0 10px 0;
+    background-color: #11aaaa;
+}
+
 .App-logo {
   height: 40vmin;
 }
