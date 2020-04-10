@@ -7,6 +7,11 @@
     padding: 80px 0 0;
 }
 
+.guess-no{
+    font-size: 30px;
+    padding-left: 5px;
+}
+
 @media (max-width : 425px) {
     .App{
         width: 90%;

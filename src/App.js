@@ -112,6 +112,15 @@ export default class App extends React.Component {
         alert("GAME OVER");
     }
 
+    renderGuessRemaining() {
+        return <div>
+            No Of Guesses remained:
+            <span className="guess-no">
+                {this.noOfWrongGuessesAllowed - this.state.noOfWrongGuesses}
+            </span>
+        </div>
+    }
+
     render() {
         return <div className="App">
             <MemoryPlayGround
@@ -121,7 +130,7 @@ export default class App extends React.Component {
                 hideTiles={this.state.hideTiles}
                 onTileClick={this.onTileClick}
             />
-            <div>{this.state.showTilesTimer ? this.state.showTilesTimer : ""}</div>
+            <div>{this.renderGuessRemaining()}</div>
             <div>{this.guessQuestion()}</div>
             <div className="status-bar-border">
                 <div className="status-bar-fill" style={{
