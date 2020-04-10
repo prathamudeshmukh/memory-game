@@ -8,8 +8,8 @@ export default class App extends React.Component {
 
     constructor(props){
         super(props);
-        this.rows = 5;
-        this.columns = 5;
+        this.rows = 4;
+        this.columns = 4;
         this.memorizeTime = 10;
         this.noOfQuestionsToBeAsked = 5;
         this.state = {
