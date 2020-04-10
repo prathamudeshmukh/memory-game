@@ -8,17 +8,19 @@ export default class App extends React.Component {
 
     constructor(props){
         super(props);
-        this.rows = 5;
-        this.columns = 5;
+        this.rows = 4;
+        this.columns = 4;
         this.memorizeTime = 10;
         this.noOfQuestionsToBeAsked = 5;
+        this.noOfWrongGuessesAllowed = 3;
         this.state = {
             hideTiles: true,
             showTilesTimer: this.memorizeTime,
             memoryData: [],
             readComplete: false,
             guessQuestionsAlreadyAsked:[],
-            progressBar: 100
+            progressBar: 100,
+            noOfWrongGuesses: 0,
         };
         _.bindAll(this, "startGame", "onTileClick")
     }
@@ -101,7 +103,13 @@ export default class App extends React.Component {
             this.setState( { questionsToBeAsked } );
             return;
         }
-        alert("failure");
+        console.info("wrong guesses:",this.state.noOfWrongGuesses,this.noOfWrongGuessesAllowed);
+        if (this.state.noOfWrongGuesses < this.noOfWrongGuessesAllowed) {
+            alert("failure");
+            this.setState({noOfWrongGuesses: this.state.noOfWrongGuesses + 1});
+            return;
+        }
+        alert("GAME OVER");
     }
 
     render() {
