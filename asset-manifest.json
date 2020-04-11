@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/memory-game/static/css/main.94270165.chunk.css",
-    "main.js": "/memory-game/static/js/main.dd546756.chunk.js",
-    "main.js.map": "/memory-game/static/js/main.dd546756.chunk.js.map",
+    "main.css": "/memory-game/static/css/main.73b163d7.chunk.css",
+    "main.js": "/memory-game/static/js/main.cbcf1931.chunk.js",
+    "main.js.map": "/memory-game/static/js/main.cbcf1931.chunk.js.map",
     "runtime-main.js": "/memory-game/static/js/runtime-main.53e70fbf.js",
     "runtime-main.js.map": "/memory-game/static/js/runtime-main.53e70fbf.js.map",
     "static/css/2.53dc0e97.chunk.css": "/memory-game/static/css/2.53dc0e97.chunk.css",
-    "static/js/2.4b3dd649.chunk.js": "/memory-game/static/js/2.4b3dd649.chunk.js",
-    "static/js/2.4b3dd649.chunk.js.map": "/memory-game/static/js/2.4b3dd649.chunk.js.map",
+    "static/js/2.2cf19204.chunk.js": "/memory-game/static/js/2.2cf19204.chunk.js",
+    "static/js/2.2cf19204.chunk.js.map": "/memory-game/static/js/2.2cf19204.chunk.js.map",
     "index.html": "/memory-game/index.html",
-    "precache-manifest.bb83afb57c9f1a4bc94e15227a401aeb.js": "/memory-game/precache-manifest.bb83afb57c9f1a4bc94e15227a401aeb.js",
+    "precache-manifest.658e22c7efa8c54535535fd491a7666c.js": "/memory-game/precache-manifest.658e22c7efa8c54535535fd491a7666c.js",
     "service-worker.js": "/memory-game/service-worker.js",
     "static/css/2.53dc0e97.chunk.css.map": "/memory-game/static/css/2.53dc0e97.chunk.css.map",
-    "static/css/main.94270165.chunk.css.map": "/memory-game/static/css/main.94270165.chunk.css.map"
+    "static/css/main.73b163d7.chunk.css.map": "/memory-game/static/css/main.73b163d7.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.53e70fbf.js",
     "static/css/2.53dc0e97.chunk.css",
-    "static/js/2.4b3dd649.chunk.js",
-    "static/css/main.94270165.chunk.css",
-    "static/js/main.dd546756.chunk.js"
+    "static/js/2.2cf19204.chunk.js",
+    "static/css/main.73b163d7.chunk.css",
+    "static/js/main.cbcf1931.chunk.js"
   ]
 }
