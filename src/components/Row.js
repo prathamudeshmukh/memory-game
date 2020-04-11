@@ -11,7 +11,12 @@ export default class Row extends React.Component {
                 const rows = [];
                 for (let i = 0; i < this.props.columns; i++) {
                     rows.push(<div onClick={() => {this.props.onTileClick(this.props.currentRow, i)}}>
-                        <span className={"tile"} id={`tile_${this.props.currentRow}_${i}`}>{this.props.hideTiles || !this.props.rowData[i]? "" : this.props.rowData[i]}</span>
+                        <span className={"tile"} id={`tile_${this.props.currentRow}_${i}`}>
+                            {this.props.hideTiles || !this.props.rowData[i]? "" : this.props.rowData[i]}
+                            <div className={"tile-failure"}>
+                                <img src={"cross.svg"}/>
+                            </div>
+                        </span>
                     </div>);
                 }
                 return rows;

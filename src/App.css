@@ -22,12 +22,32 @@
     }
 }
 
+.flex > div {
+    position: relative;
+}
+
+
 .tile {
     background: #09d3ac;
     height: 130px;
     border-radius: 10px;
     box-shadow: 4px 5px #404443;
     display: block;
+}
+
+.tile:active {
+    box-shadow: 2px 3px #404443;
+}
+
+.tile:hover {
+    cursor: pointer;
+}
+
+.tile-failure {
+    height: 100%;
+    position: absolute;
+    top: 25%;
+    left: 36%;
 }
 
 .status-bar-fill{
