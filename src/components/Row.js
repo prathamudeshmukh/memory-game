@@ -6,17 +6,18 @@ export default class Row extends React.Component {
     }
 
     render() {
-        return <div className={"flex"}>
+        return <div className={"flex three"}>
             {(() => {
                 const rows = [];
                 for (let i = 0; i < this.props.columns; i++) {
                     rows.push(<div onClick={() => {this.props.onTileClick(this.props.currentRow, i)}}>
-                        <span className={"tile"} id={`tile_${this.props.currentRow}_${i}`}>
+                        <div className={"tile-failure"}>
+                            <img className={"failure-img"} src={"cross.svg"}/>
+                        </div>
+                        <div className={"tile"} id={`tile_${this.props.currentRow}_${i}`}>
                             {this.props.hideTiles || !this.props.rowData[i]? "" : this.props.rowData[i]}
-                            <div className={"tile-failure"}>
-                                <img src={"cross.svg"}/>
-                            </div>
-                        </span>
+                            <span className={"tile-text"}>45</span>
+                        </div>
                     </div>);
                 }
                 return rows;
