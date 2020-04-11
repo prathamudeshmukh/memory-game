@@ -4,7 +4,6 @@ import '../node_modules/picnic/picnic.min.css';
 import MemoryPlayGround from "./components/MemoryPlayGround";
 import _ from "underscore";
 import {ANSWER_STATUS_RIGHT, ANSWER_STATUS_WRONG} from "./Constants";
-import Game from "./models/Game";
 
 const HIGHEST_SCORE_KEY = "HIGHEST_SCORE";
 
@@ -33,7 +32,7 @@ export default class App extends React.Component {
             highestScore: highestScore ? parseInt(highestScore) : 0,
             answersGiven: [],
         };
-        _.bindAll(this, "startGame", "onTileClick")
+        _.bindAll(this, "startGame", "onTileClick", "resetGame")
     }
 
     getMemoryData() {
@@ -58,6 +57,21 @@ export default class App extends React.Component {
 
     getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    resetGame() {
+        this.setState({
+            questionsToBeAsked: [],
+            answersGiven: [],
+            memoryMetaData: [],
+            memoryData: [],
+            currentScore: 0,
+            progressBar: 100,
+            hideTiles: true,
+            readComplete: false,
+            showTilesTimer: this.memorizeTime,
+            noOfWrongGuesses: 0
+        })
     }
 
     startGame() {
@@ -164,6 +178,7 @@ export default class App extends React.Component {
 
     render() {
         return <div className="App">
+            <nav><span className={"brand"}>Memory Game</span></nav>
             <MemoryPlayGround
                 memoryData={this.state.memoryData}
                 rows={this.rows}
@@ -184,6 +199,7 @@ export default class App extends React.Component {
                 </div>
             </div>
             <button onClick={this.startGame}>Start!</button>
+            <button onClick={this.resetGame}>Reset</button>
         </div>
     }
 }
