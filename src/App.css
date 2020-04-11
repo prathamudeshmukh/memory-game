@@ -1,20 +1,20 @@
 .App {
     background: #fff;
     text-align: left;
-    width: 60%;
+    width: 40%;
     max-width: 960px;
     margin: 0 auto;
     padding: 80px 0 0;
 }
 
-.guess-no{
+.guess-no {
     font-size: 30px;
     padding-left: 5px;
 }
 
 @media (max-width : 425px) {
     .App{
-        width: 90%;
+        width: 85%;
     }
 
     .flex > div > span {
@@ -22,20 +22,12 @@
     }
 }
 
-.flex>*>* {
-    display: block;
-    padding: .3em 0;
+.tile {
     background: #09d3ac;
-    text-align: center;
-}
-.flex > div {
-    padding-left: 0.2em;
-    border-radius: 1px;
-}
-
-.flex > div > span {
-    border-radius: 3px;
-    height: 100px;
+    height: 130px;
+    border-radius: 10px;
+    box-shadow: 4px 5px #404443;
+    display: block;
 }
 
 .status-bar-fill{

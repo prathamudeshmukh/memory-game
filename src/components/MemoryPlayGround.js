@@ -7,7 +7,7 @@ export default class MemoryPlayGround extends React.Component {
     }
 
     render() {
-        return <React.Fragment>
+        return <div className={"flex"}>
             {(() => {
                 const rows = [];
                 for (let i = 0; i < this.props.rows; i++) {
@@ -21,7 +21,7 @@ export default class MemoryPlayGround extends React.Component {
                 }
                 return rows;
             })()}
-        </React.Fragment>
+        </div>
 
     }
 }

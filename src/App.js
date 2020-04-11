@@ -4,15 +4,19 @@ import '../node_modules/picnic/picnic.min.css';
 import MemoryPlayGround from "./components/MemoryPlayGround";
 import _ from "underscore";
 
+const HIGHEST_SCORE_KEY = "HIGHEST_SCORE";
+
 export default class App extends React.Component {
 
     constructor(props){
         super(props);
-        this.rows = 4;
-        this.columns = 4;
+        this.rows = 3;
+        this.columns = 3;
         this.memorizeTime = 10;
-        this.noOfQuestionsToBeAsked = 5;
-        this.noOfWrongGuessesAllowed = 3;
+        this.noOfQuestionsToBeAsked = 3;
+        this.noOfWrongGuessesAllowed = 2;
+        this.scoreIncrementFactor = 5;
+        const highestScore = localStorage.getItem(HIGHEST_SCORE_KEY);
         this.state = {
             hideTiles: true,
             showTilesTimer: this.memorizeTime,
@@ -21,6 +25,8 @@ export default class App extends React.Component {
             guessQuestionsAlreadyAsked:[],
             progressBar: 100,
             noOfWrongGuesses: 0,
+            currentScore: 0,
+            highestScore: highestScore ? parseInt(highestScore) : 0,
         };
         _.bindAll(this, "startGame", "onTileClick")
     }
@@ -100,7 +106,13 @@ export default class App extends React.Component {
         if (memoryData[row][col] === memoryMetaData[latestGuessQuestion]) {
             alert("success");
             questionsToBeAsked.pop();
-            this.setState( { questionsToBeAsked } );
+            const currentScore = this.state.currentScore + this.scoreIncrementFactor;
+            let highestScore = this.state.highestScore;
+            if (currentScore > this.state.highestScore) {
+                highestScore = currentScore;
+                localStorage.setItem(HIGHEST_SCORE_KEY, highestScore.toString())
+            }
+            this.setState( { questionsToBeAsked, currentScore, highestScore } );
             return;
         }
         console.info("wrong guesses:",this.state.noOfWrongGuesses,this.noOfWrongGuessesAllowed);
@@ -121,6 +133,23 @@ export default class App extends React.Component {
         </div>
     }
 
+    renderScores() {
+        return <div>
+            <div>
+                Current Score:
+                <span className="current-score">
+                    {this.state.currentScore}
+                </span>
+            </div>
+            <div>
+                Your Highest Score:
+                <span className="highest-score">
+                    {this.state.highestScore}
+                </span>
+            </div>
+        </div>
+    }
+
     render() {
         return <div className="App">
             <MemoryPlayGround
@@ -132,6 +161,7 @@ export default class App extends React.Component {
             />
             <div>{this.renderGuessRemaining()}</div>
             <div>{this.guessQuestion()}</div>
+            <div>{this.renderScores()}</div>
             <div className="status-bar-border">
                 <div className="status-bar-fill" style={{
                     width: `${this.state.progressBar}%`,
