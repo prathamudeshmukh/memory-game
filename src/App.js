@@ -3,8 +3,12 @@ import './App.css';
 import '../node_modules/picnic/picnic.min.css';
 import MemoryPlayGround from "./components/MemoryPlayGround";
 import _ from "underscore";
+import {ANSWER_STATUS_RIGHT, ANSWER_STATUS_WRONG} from "./Constants";
+import Game from "./models/Game";
 
 const HIGHEST_SCORE_KEY = "HIGHEST_SCORE";
+
+const ANSWER_STATUS_NONE = "NONE";
 
 export default class App extends React.Component {
 
@@ -27,6 +31,7 @@ export default class App extends React.Component {
             noOfWrongGuesses: 0,
             currentScore: 0,
             highestScore: highestScore ? parseInt(highestScore) : 0,
+            answersGiven: [],
         };
         _.bindAll(this, "startGame", "onTileClick")
     }
@@ -34,17 +39,21 @@ export default class App extends React.Component {
     getMemoryData() {
         let memoryData = [];
         const memoryMetaData = [];
+        const answersGiven = [];
         for (let row=0; row<this.rows; row++) {
             const newRow = [];
+            answersGiven[row] = [];
             for (let col=0; col<this.columns; col++) {
                 const number = this.getRandomInt(99);
                 newRow.push(number);
                 memoryMetaData.push(number);
+                answersGiven[row].push(ANSWER_STATUS_NONE);
             }
             memoryData.push(newRow);
         }
+        console.info('memoryData',memoryData);
         const questionsToBeAsked = this.getQuestionsToBeAsked(memoryMetaData);
-        return {memoryData, memoryMetaData, questionsToBeAsked};
+        return {memoryData, memoryMetaData, questionsToBeAsked, answersGiven};
     }
 
     getRandomInt(max) {
@@ -52,8 +61,8 @@ export default class App extends React.Component {
     }
 
     startGame() {
-        const { memoryData, memoryMetaData, questionsToBeAsked} = this.getMemoryData();
-        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked, progressBar: 0 } );
+        const { memoryData, memoryMetaData, questionsToBeAsked, answersGiven} = this.getMemoryData();
+        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked, answersGiven, progressBar: 0 } );
         this.showTilesTimerInterval = setInterval(() => {
             this.setState( {
                 showTilesTimer: this.state.showTilesTimer - 1
@@ -99,12 +108,12 @@ export default class App extends React.Component {
     }
 
     onTileClick(row, col) {
-        const { questionsToBeAsked, memoryData, memoryMetaData} = this.state;
+        const { questionsToBeAsked, memoryData, memoryMetaData, answersGiven} = this.state;
         const latestGuessQuestion = questionsToBeAsked[questionsToBeAsked.length - 1];
         console.log('clicked on:'+ memoryData[row][col]);
         console.log('Expected :'+ memoryMetaData[latestGuessQuestion]);
         if (memoryData[row][col] === memoryMetaData[latestGuessQuestion]) {
-            alert("success");
+            // alert("success");
             questionsToBeAsked.pop();
             const currentScore = this.state.currentScore + this.scoreIncrementFactor;
             let highestScore = this.state.highestScore;
@@ -112,16 +121,19 @@ export default class App extends React.Component {
                 highestScore = currentScore;
                 localStorage.setItem(HIGHEST_SCORE_KEY, highestScore.toString())
             }
-            this.setState( { questionsToBeAsked, currentScore, highestScore } );
+            answersGiven[row][col] = ANSWER_STATUS_RIGHT;
+            this.setState( { questionsToBeAsked, currentScore, highestScore, answersGiven } );
             return;
         }
         console.info("wrong guesses:",this.state.noOfWrongGuesses,this.noOfWrongGuessesAllowed);
+        answersGiven[row][col] = ANSWER_STATUS_WRONG;
         if (this.state.noOfWrongGuesses < this.noOfWrongGuessesAllowed) {
-            alert("failure");
-            this.setState({noOfWrongGuesses: this.state.noOfWrongGuesses + 1});
+            // alert("failure");
+            this.setState({ noOfWrongGuesses: this.state.noOfWrongGuesses + 1, answersGiven });
             return;
         }
-        alert("GAME OVER");
+        // alert("GAME OVER");
+        this.setState({answersGiven})
     }
 
     renderGuessRemaining() {
@@ -158,6 +170,7 @@ export default class App extends React.Component {
                 columns={this.columns}
                 hideTiles={this.state.hideTiles}
                 onTileClick={this.onTileClick}
+                answersGiven={this.state.answersGiven}
             />
             <div>{this.renderGuessRemaining()}</div>
             <div>{this.guessQuestion()}</div>

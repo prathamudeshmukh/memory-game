@@ -17,6 +17,7 @@ export default class MemoryPlayGround extends React.Component {
                         columns={this.props.columns}
                         onTileClick={this.props.onTileClick}
                         currentRow={i}
+                        answersGiven={this.props.answersGiven[i] || [] }
                     />);
                 }
                 return rows;

@@ -1,10 +1,14 @@
 .App {
-    background: #fff;
+    background: #eeeeee;
     text-align: left;
     width: 40%;
     max-width: 960px;
     margin: 0 auto;
     padding: 80px 0 0;
+}
+
+#root {
+    background: #eeeeee;
 }
 
 .guess-no {
@@ -44,8 +48,25 @@
     height: 100%;
     position: absolute;
     top: 10%;
-    left: 20%;
+    left: 28%;
     z-index: 1;
+    display: none;
+}
+
+.tile-success {
+    height: 100%;
+    position: absolute;
+    top: 10%;
+    left: 28%;
+    z-index: 1;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
 }
 
 .status-bar-fill{
@@ -53,6 +74,7 @@
     transition-timing-function: ease;
     background-color: #09d3ac;
     border: 1px solid #09d3ac;
+    border-radius: 5px;
     transition: width;
 }
 
@@ -60,6 +82,8 @@
     border: 1px solid #11aaaa;
     margin: 10px 0 10px 0;
     background-color: #11aaaa;
+    border-radius: 5px;
+    box-shadow: 3px 3px #404443;
 }
 
 .App-logo {

@@ -1,0 +1,15 @@
+<svg width="100.00000000000001" height="100.00000000000001" xmlns="http://www.w3.org/2000/svg" style="vector-effect: non-scaling-stroke;" stroke="null">
+ <defs style="vector-effect: non-scaling-stroke;" stroke="null">
+  <filter height="200%" width="200%" y="-50%" x="-50%" id="svg_2_blur">
+   <feGaussianBlur stdDeviation="0.4" in="SourceGraphic"/>
+  </filter>
+ </defs>
+ <g stroke="null">
+  <title stroke="null">background</title>
+  <rect stroke="null" fill="none" id="canvas_background" height="102" width="102" y="-1" x="-1"/>
+ </g>
+ <g stroke="null">
+  <title stroke="null">Layer 1</title>
+  <path stroke-width="0" filter="url(#svg_2_blur)" fill="#09d3ac" stroke="null" id="svg_2" d="m38.073366,76.10907c-1.046032,0 -2.092065,-0.471052 -2.890551,-1.413253l-20.449473,-24.128818c-1.597013,-1.884305 -1.597013,-4.936954 0,-6.821259s4.18413,-1.884353 5.781102,0l17.558922,20.718189l42.072778,-49.642621c1.596972,-1.884353 4.18413,-1.884353 5.781102,0s1.597013,4.936906 0,6.821259l-44.963329,53.053251c-0.798486,0.942201 -1.844518,1.413253 -2.890551,1.413253z"/>
+ </g>
+</svg>
