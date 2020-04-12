@@ -10,7 +10,6 @@ export default class Row extends React.Component {
         return <div className={"flex three"}>
             {(() => {
                 const rows = [];
-                console.log('this.props.rowData',this.props.rowData)
                 for (let i = 0; i < this.props.columns; i++) {
                     let failureMessage = "hide";
                     let tileClass = this.props.hideTiles || !this.props.rowData[i] ? "hide" : "show";

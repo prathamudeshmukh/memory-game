@@ -31,8 +31,10 @@ export default class App extends React.Component {
             currentScore: 0,
             highestScore: highestScore ? parseInt(highestScore) : 0,
             answersGiven: [],
+            roundInProgress:false,
+            transitionDuration: this.memorizeTime
         };
-        _.bindAll(this, "startGame", "onTileClick", "resetGame")
+        _.bindAll(this, "startGame", "onTileClick", "resetGame","gotoNextRound");
     }
 
     getMemoryData() {
@@ -50,7 +52,6 @@ export default class App extends React.Component {
             }
             memoryData.push(newRow);
         }
-        console.info('memoryData',memoryData);
         const questionsToBeAsked = this.getQuestionsToBeAsked(memoryMetaData);
         return {memoryData, memoryMetaData, questionsToBeAsked, answersGiven};
     }
@@ -70,13 +71,43 @@ export default class App extends React.Component {
             hideTiles: true,
             readComplete: false,
             showTilesTimer: this.memorizeTime,
-            noOfWrongGuesses: 0
+            noOfWrongGuesses: 0,
+            roundInProgress: false,
+            transitionDuration: this.memorizeTime
         })
     }
 
+    gotoNextRound(){
+        const transitionDurationForNextRound = 1;
+        this.setState({
+            questionsToBeAsked: [],
+            answersGiven: [],
+            memoryMetaData: [],
+            memoryData: [],
+            progressBar: 100,
+            hideTiles: true,
+            readComplete: false,
+            showTilesTimer: this.memorizeTime,
+            noOfWrongGuesses: 0,
+            roundInProgress: false,
+            transitionDuration: transitionDurationForNextRound
+        });
+       setTimeout(this.startGame, transitionDurationForNextRound * 1000);
+    }
+
     startGame() {
+        if (this.state.roundInProgress) return;
         const { memoryData, memoryMetaData, questionsToBeAsked, answersGiven} = this.getMemoryData();
-        this.setState( { hideTiles: false, memoryData, memoryMetaData, questionsToBeAsked, answersGiven, progressBar: 0 } );
+        this.setState( {
+            hideTiles: false,
+            memoryData,
+            memoryMetaData,
+            questionsToBeAsked,
+            answersGiven,
+            transitionDuration: this.memorizeTime,
+            progressBar: 0,
+            roundInProgress: true
+        } );
         this.showTilesTimerInterval = setInterval(() => {
             this.setState( {
                 showTilesTimer: this.state.showTilesTimer - 1
@@ -92,9 +123,6 @@ export default class App extends React.Component {
     guessQuestion(){
         if(this.state.readComplete){
             console.log("MemoryData", this.state.memoryData);
-            console.log("questionsToBeAsked", this.state.questionsToBeAsked);
-            console.log("memoryMetaData", this.state.memoryMetaData);
-
             const {questionsToBeAsked, memoryMetaData} = this.state;
             if (questionsToBeAsked.length === 0) {
                 return 'Round over';
@@ -122,12 +150,10 @@ export default class App extends React.Component {
     }
 
     onTileClick(row, col) {
+        if (!this.state.roundInProgress) return;
         const { questionsToBeAsked, memoryData, memoryMetaData, answersGiven} = this.state;
         const latestGuessQuestion = questionsToBeAsked[questionsToBeAsked.length - 1];
-        console.log('clicked on:'+ memoryData[row][col]);
-        console.log('Expected :'+ memoryMetaData[latestGuessQuestion]);
         if (memoryData[row][col] === memoryMetaData[latestGuessQuestion]) {
-            // alert("success");
             questionsToBeAsked.pop();
             const currentScore = this.state.currentScore + this.scoreIncrementFactor;
             let highestScore = this.state.highestScore;
@@ -139,15 +165,12 @@ export default class App extends React.Component {
             this.setState( { questionsToBeAsked, currentScore, highestScore, answersGiven } );
             return;
         }
-        console.info("wrong guesses:",this.state.noOfWrongGuesses,this.noOfWrongGuessesAllowed);
         answersGiven[row][col] = ANSWER_STATUS_WRONG;
         if (this.state.noOfWrongGuesses < this.noOfWrongGuessesAllowed) {
-            // alert("failure");
             this.setState({ noOfWrongGuesses: this.state.noOfWrongGuesses + 1, answersGiven });
             return;
         }
-        // alert("GAME OVER");
-        this.setState({answersGiven})
+        this.setState({answersGiven, roundInProgress: false})
     }
 
     renderGuessRemaining() {
@@ -193,12 +216,17 @@ export default class App extends React.Component {
             <div className="status-bar-border">
                 <div className="status-bar-fill" style={{
                     width: `${this.state.progressBar}%`,
-                    transitionDuration: `${this.memorizeTime}s`
+                    transitionDuration: `${this.state.transitionDuration}s`
                 }} >
                     {this.state.showTilesTimer ? this.state.showTilesTimer : ""}
                 </div>
             </div>
             <button onClick={this.startGame}>Start!</button>
+            {(()=>{
+                if(this.state.roundInProgress && this.state.questionsToBeAsked.length === 0) {
+                    return <button onClick={this.gotoNextRound}>Next Round</button>
+                }
+            })()}
             <button onClick={this.resetGame}>Reset</button>
         </div>
     }
