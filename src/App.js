@@ -4,7 +4,6 @@ import '../node_modules/picnic/picnic.min.css';
 import MemoryPlayGround from "./components/MemoryPlayGround";
 import _ from "underscore";
 import {ANSWER_STATUS_RIGHT, ANSWER_STATUS_WRONG} from "./Constants";
-
 const HIGHEST_SCORE_KEY = "HIGHEST_SCORE";
 
 const ANSWER_STATUS_NONE = "NONE";
@@ -174,12 +173,12 @@ export default class App extends React.Component {
     }
 
     renderGuessRemaining() {
-        return <div>
+        return <span>
             No Of Guesses remained:
             <span className="guess-no">
                 {this.noOfWrongGuessesAllowed - this.state.noOfWrongGuesses}
             </span>
-        </div>
+        </span>
     }
 
     renderScores() {
@@ -200,8 +199,14 @@ export default class App extends React.Component {
     }
 
     render() {
-        return <div className="App">
-            <nav><span className={"brand"}>Memory Game</span></nav>
+        return <>
+        <div className={"bg-fill"} style={{
+            height: `${this.state.progressBar}%`,
+            transitionDuration: `${this.state.transitionDuration}s`
+        }} />
+        <div className="App">
+
+            {/*<nav><span className={"brand"}>Memory Game</span></nav>*/}
             <MemoryPlayGround
                 memoryData={this.state.memoryData}
                 rows={this.rows}
@@ -210,24 +215,27 @@ export default class App extends React.Component {
                 onTileClick={this.onTileClick}
                 answersGiven={this.state.answersGiven}
             />
-            <div>{this.renderGuessRemaining()}</div>
-            <div>{this.guessQuestion()}</div>
-            <div>{this.renderScores()}</div>
-            <div className="status-bar-border">
+            <div className="flex">{this.renderGuessRemaining()}</div>
+            <div className="flex">{this.guessQuestion()}</div>
+            <div className="flex">{this.renderScores()}</div>
+            {/*<div className="flex status-bar-border">
                 <div className="status-bar-fill" style={{
                     width: `${this.state.progressBar}%`,
                     transitionDuration: `${this.state.transitionDuration}s`
                 }} >
                     {this.state.showTilesTimer ? this.state.showTilesTimer : ""}
                 </div>
+            </div>*/}
+            <div className="flex">
+                <button onClick={this.startGame}>Start!</button>
+                {(()=>{
+                    if(this.state.roundInProgress && this.state.questionsToBeAsked.length === 0) {
+                        return <button onClick={this.gotoNextRound}>Next Round</button>
+                    }
+                })()}
+                <button onClick={this.resetGame}>Reset</button>
             </div>
-            <button onClick={this.startGame}>Start!</button>
-            {(()=>{
-                if(this.state.roundInProgress && this.state.questionsToBeAsked.length === 0) {
-                    return <button onClick={this.gotoNextRound}>Next Round</button>
-                }
-            })()}
-            <button onClick={this.resetGame}>Reset</button>
         </div>
+        </>
     }
 }
